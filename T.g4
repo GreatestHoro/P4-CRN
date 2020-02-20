@@ -4,21 +4,28 @@ grammar T;
 Package com.example;
 }
 
-prog :  Initializer ':' Rules ':' Endif ':' Oncompletetion
-     |  Initializer ':' Rules ':' Endif
-     |  Initializer ':' Rules ':' Oncompletetion
-     |  Initializer ':' Rules
+prog :  Initializer Rules Endif Oncompletetion
+     |  Initializer Rules Endif
+     |  Initializer Rules Oncompletetion
+     |  Initializer Rules
      ;
-Initializer: '-' InitInitializer ':' ' ' Initializer (';' | ',') Var '=' Int+
-           | InitInitializer ':' ' ' Var '=' Int+ ';'
-           | Var '=' Int+ ';'
-           ;
-Rules: 'float';
+Initializer: InitInitializer ':'VarList;
+VarList: '-' VarList (';' | ',') Identifier '=' Int+
+            | ((';' | ',') Identifier '=' Int+ ';')+
+            | (Identifier '=' Int+ ';')+
+            ;
+Rules: Rule ;
+
+Rule: (ScaledVar SpecialOperator)+ScaledVar',';
+ScaledVar:(Identifier Operator)* Identifier
+         ;
+Operator: '+'|'*';
+SpecialOperator: 'to'|'cont'|'->';
 Endif: 'Notfloat';
 Oncompletetion: 'maybeInt';
-Seperater:':'|',';
+Seperator:':'|',';
 Assign: '=';
-Var: 'a'..'z'|'A'..'Z';
+Identifier: Int*('a'..'z'|'A'..'Z')+;
 Int: ('0'..'9')+;
 Float: 'float';
 InitInitializer: 'Initialize';
