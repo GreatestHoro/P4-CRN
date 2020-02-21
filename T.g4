@@ -26,9 +26,10 @@ Rate: ('(' Int+ ')'','|'('Int+ ',' Int+')'',')*('('Int+ ',' Int+')'';'|'(' Int+ 
 Endif: InitEnd ':' (EndCond Compare EndCond';')+;
 EndCond: ((TreeSize|Identifier) '+')* (TreeSize|Identifier);
 
-Oncompletetion: InitCompletion ':' Print;
-Print: ('print("'Char*'");')*;
-
+Oncompletetion: InitCompletion ':' Print+;
+Print: 'print("'String'");';
+String: (Char|Int|Float|' ')+;
+WHITESPACE : ' ' -> skip ;
 Operator: '+'|'*';
 SpecialOperator: 'to'|'cont'|'->';
 Seperator:':'|',';
